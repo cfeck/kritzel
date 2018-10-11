@@ -1,0 +1,147 @@
+Only in src: cellwidget.c
+diff -u src/common.h /local/git/playground/accessibility/kritzel/src/cellwriter/common.h
+--- src/common.h	2011-03-12 07:28:04.000000000 +0100
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/common.h	2012-08-08 21:18:49.424449284 +0200
+@@ -20,9 +20,10 @@
+ 
+ */
+ 
+-#include <gtk/gtk.h>
++/*#include <gtk/gtk.h>*/
+ #include <math.h>
+ 
++#if 0
+ /*
+         Limits
+ */
+@@ -38,6 +39,7 @@
+ 
+ int single_instance_init(SingleInstanceFunc callback, const char *str);
+ void single_instance_cleanup(void);
++#endif
+ 
+ /*
+         Unicode blocks
+@@ -62,6 +64,7 @@
+ int profile_sync_int(int *var);
+ int profile_sync_short(short *var);
+ 
++#if 0
+ /*
+         Window
+ */
+@@ -98,6 +101,7 @@
+ 
+ /* Multiply to convert RGB to GDK color */
+ #define COLOR_SCALE 256
++#endif
+ 
+ /* Constants may not have been defined if GLib is not included */
+ #ifndef TRUE
+@@ -110,6 +114,7 @@
+ #define NULL ((void*)0)
+ #endif
+ 
++#if 0
+ /* A macro used to initialize GdkColor with RGB values */
+ #define RGB_TO_GDKCOLOR(r, g, b) {0, (r) * 256, (g) * 256, (b) * 256 }
+ 
+@@ -167,6 +172,7 @@
+ void log_errno(const char *message);
+ void log_print(const char *format, ...);
+ void trace_full(const char *file, const char *func, const char *fmt, ...);
++#endif
+ 
+ /*
+         Angles
+Only in /local/git/playground/accessibility/kritzel/src/cellwriter/: config.h
+Only in src: keyevent.c
+Only in src: keys.h
+Only in src: keywidget.c
+Only in /local/git/playground/accessibility/kritzel/src/cellwriter/: libcellwriter.c
+Only in /local/git/playground/accessibility/kritzel/src/cellwriter/: libcellwriter.h
+Only in src: libegg
+Only in src: main.c
+Only in src: options.c
+diff -u src/preprocess.c /local/git/playground/accessibility/kritzel/src/cellwriter/preprocess.c
+--- src/preprocess.c	2011-03-12 07:27:41.000000000 +0100
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/preprocess.c	2012-08-08 21:25:20.225563545 +0200
+@@ -43,7 +43,8 @@
+ #define GLUABLE_PENALTY   0.08f
+ #define GLUE_PENALTY      0.02f
+ 
+-int ignore_stroke_dir = TRUE, ignore_stroke_num = TRUE, prep_examined;
++int ignore_stroke_dir = TRUE, ignore_stroke_num = TRUE;
++extern int prep_examined;
+ 
+ static float measure_partial(Stroke *as, Stroke *b, Vec2 *offset, float scale_b)
+ {
+Only in /local/git/playground/accessibility/kritzel/src/cellwriter/: profile.c
+diff -u src/recognize.c /local/git/playground/accessibility/kritzel/src/cellwriter/recognize.c
+--- src/recognize.c	2011-10-08 20:38:34.000000000 +0200
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/recognize.c	2012-07-28 16:29:10.628702362 +0200
+@@ -24,7 +24,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <math.h>
+-#include <gtk/gtk.h>
++/*#include <gtk/gtk.h>*/
+ #include "common.h"
+ #include "recognize.h"
+ 
+@@ -527,6 +527,7 @@
+                   msec / (prep_examined - num_disqualified) : -1,
+                   strength);
+ 
++#if 0
+         /*  Print out the top candidate scores in detail */
+         if (log_level >= G_LOG_LEVEL_DEBUG)
+                 for (i = 0; i < num_alts && alts[i]; i++) {
+@@ -551,6 +552,7 @@
+                                 log_print("%d", alts[i]->transform.glue[j]);
+                         log_print("]\n");
+                 }
++#endif
+ 
+         /* Select the top result */
+         input->ch = alts[0] ? alts[0]->ch : 0;
+diff -u src/recognize.h /local/git/playground/accessibility/kritzel/src/cellwriter/recognize.h
+--- src/recognize.h	2011-10-08 20:38:44.000000000 +0200
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/recognize.h	2012-07-28 19:59:54.382633634 +0200
+@@ -73,7 +73,7 @@
+ */
+ 
+ /* This will prevent the word frequency table from loading */
+-/* #define DISABLE_WORDFREQ */
++#define DISABLE_WORDFREQ
+ 
+ /* Largest allowed engine weight */
+ #define MAX_RANGE 100
+Only in src: singleinstance.c
+Only in src: statusicon.c
+diff -u src/stroke.c /local/git/playground/accessibility/kritzel/src/cellwriter/stroke.c
+--- src/stroke.c	2011-03-12 07:27:19.000000000 +0100
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/stroke.c	2012-07-28 15:53:07.295747694 +0200
+@@ -23,7 +23,7 @@
+ #include "config.h"
+ #include <string.h>
+ #include <math.h>
+-#include <gtk/gtk.h>
++/*#include <gtk/gtk.h>*/
+ #include "common.h"
+ #include "recognize.h"
+ 
+Only in /local/git/playground/accessibility/kritzel/src/cellwriter/: unicode.c
+Only in src: window.c
+diff -u src/wordfreq.c /local/git/playground/accessibility/kritzel/src/cellwriter/wordfreq.c
+--- src/wordfreq.c	2011-03-12 07:27:12.000000000 +0100
++++ /local/git/playground/accessibility/kritzel/src/cellwriter/wordfreq.c	2012-08-08 21:32:39.994065737 +0200
+@@ -33,6 +33,8 @@
+         Word frequency engine
+ */
+ 
++#include "enchant.h"
++
+ #ifndef DISABLE_WORDFREQ
+ 
+ /* TODO needs to be internationalized (wide char)
