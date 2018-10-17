@@ -5,6 +5,8 @@
 Sample Qt5 application that uses the cellwriter engine to
 recognize handwritten characters.
 
+![Kritzel Screenshot](/Screenshot.png?raw=true "Kritzel Screenshot")
+
 ### Training
 
 The cellwriter application must still be used to train.
